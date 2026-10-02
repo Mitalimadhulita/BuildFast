@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>30MIN • BuildFast delivery</title>
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    body {
+      background: #f5f7fb;
+      display: flex;
+      justify-content: center;
+      padding: 1rem;
+      min-height: 100vh;
+    }
+
+    /* mobile-first card container */
+    .app-container {
+      max-width: 500px;
+      width: 100%;
+      background: white;
+      border-radius: 32px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+      overflow: hidden;
+      padding: 1.5rem 1.2rem 1.8rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      height: fit-content;
+      margin: 0 auto;
+    }
+
+    /* header + location */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .logo-icon {
+      background: #1e3c72;
+      color: white;
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      box-shadow: 0 6px 12px rgba(30, 60, 114, 0.2);
+    }
+
+    .logo-text {
+      font-weight: 700;
+      font-size: 1.3rem;
+      letter-spacing: -0.5px;
+      color: #0b1b33;
+    }
+
+    .logo-text span {
+      color: #1e3c72;
+      font-weight: 800;
+    }
+
+    .delivery-badge {
+      background: #eef3ff;
+      padding: 6px 12px;
+      border-radius: 40px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #1e3c72;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+    }
+
+    .delivery-badge i {
+      color: #f7b731;
+      font-size: 1rem;
+    }
+
+    .address-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #f8faff;
+      padding: 12px 16px;
+      border-radius: 20px;
+      border: 1px solid #e9eef6;
+    }
+
+    .address-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #1e293b;
+      font-weight: 500;
+      font-size: 0.95rem;
+    }
+
+    .address-left i {
+      color: #1e3c72;
+      font-size: 1.1rem;
+    }
+
+    .change-btn {
+      background: transparent;
+      border: none;
+      color: #1e3c72;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 30px;
+      transition: all 0.2s;
+    }
+
+    .change-btn:hover {
+      background: #e2eafc;
+    }
+
+    /* timer / promise */
+    .promise-card {
+      background: linear-gradient(105deg, #1e3c72 0%, #2a5298 100%);
+      border-radius: 24px;
+      padding: 1.2rem 1.4rem;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 16px 30px -8px rgba(30, 60, 114, 0.35);
+    }
+
+    .promise-left h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+      letter-spacing: -0.3px;
+    }
+
+    .promise-left p {
+      font-size: 0.85rem;
+      opacity: 0.85;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .timer {
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(4px);
+      padding: 10px 16px;
+      border-radius: 40px;
+      font-weight: 700;
+      font-size: 1.6rem;
+      letter-spacing: 1px;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      border: 1px solid rgba(255,255,255,0.25);
+    }
+
+    .timer i {
+      font-size: 1.2rem;
+      margin-right: 4px;
+      color: #ffd966;
+    }
+
+    /* categories */
+    .section-title {
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: #0b1b33;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.2rem;
+    }
+
+    .section-title a {
+      font-size: 0.8rem;
+      color: #1e3c72;
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .categories {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .cat-item {
+      background: #f8faff;
+      border-radius: 20px;
+      padding: 1rem 0.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: 1px solid #eef2f9;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.02);
+    }
+
+    .cat-item.active {
+      background: #eef3ff;
+      border-color: #1e3c72;
+      box-shadow: 0 8px 16px rgba(30, 60, 114, 0.12);
+      transform: translateY(-2px);
+    }
+
+    .cat-icon {
+      width: 52px;
+      height: 52px;
+      background: white;
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      color: #1e3c72;
+      margin-bottom: 8px;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.02);
+      transition: all 0.2s;
+    }
+
+    .cat-item.active .cat-icon {
+      background: #1e3c72;
+      color: white;
+      box-shadow: 0 8px 14px rgba(30, 60, 114, 0.3);
+    }
+
+    .cat-name {
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: #0b1b33;
+    }
+
+    .cat-sub {
+      font-size: 0.65rem;
+      color: #64748b;
+      margin-top: 2px;
+    }
+
+    /* product list */
+    .products-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+
+    .product-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-height: 320px;
+      overflow-y: auto;
+      padding-right: 4px;
+      scrollbar-width: thin;
+    }
+
+    .product-grid::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .product-grid::-webkit-scrollbar-thumb {
+      background: #ccc;
+      border-radius: 10px;
+    }
+
+    .product-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: white;
+      padding: 12px 14px;
+      border-radius: 20px;
+      border: 1px solid #edf2f9;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+      transition: all 0.15s;
+    }
+
+    .product-card:hover {
+      border-color: #cdddf5;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.04);
+    }
+
+    .product-img {
+      width: 55px;
+      height: 55px;
+      background: #eef3ff;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      color: #1e3c72;
+      flex-shrink: 0;
+    }
+
+    .product-info {
+      flex: 1;
+    }
+
+    .product-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: #0b1b33;
+      margin-bottom: 2px;
+    }
+
+    .product-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.75rem;
+      color: #64748b;
+    }
+
+    .product-meta i {
+      font-size: 0.7rem;
+      color: #f7b731;
+    }
+
+    .product-price {
+      font-weight: 700;
+      font-size: 1rem;
+      color: #0b1b33;
+      margin-top: 2px;
+    }
+
+    .add-btn {
+      background: #1e3c72;
+      color: white;
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 14px;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 6px 12px rgba(30, 60, 114, 0.2);
+      flex-shrink: 0;
+    }
+
+    .add-btn:hover {
+      background: #15315c;
+      transform: scale(1.02);
+    }
+
+    .add-btn.added {
+      background: #28a745;
+    }
+
+    /* cart summary */
+    .cart-bar {
+      background: #1e3c72;
+      border-radius: 30px;
+      padding: 12px 16px 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: white;
+      margin-top: 8px;
+      box-shadow: 0 16px 30px -6px rgba(30, 60, 114, 0.4);
+    }
+
+    .cart-info {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .cart-icon {
+      position: relative;
+      font-size: 1.4rem;
+    }
+
+    .cart-count {
+      position: absolute;
+      top: -8px;
+      right: -12px;
+      background: #f7b731;
+      color: #0b1b33;
+      font-size: 0.7rem;
+      font-weight: 800;
+      width: 20px;
+      height: 20px;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .cart-total {
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+
+    .cart-total span {
+      font-size: 0.8rem;
+      font-weight: 400;
+      opacity: 0.8;
+    }
+
+    .checkout-btn {
+      background: #f7b731;
+      color: #0b1b33;
+      border: none;
+      padding: 10px 22px;
+      border-radius: 40px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: all 0.15s;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    }
+
+    .checkout-btn:hover {
+      background: #ffc94d;
+      transform: scale(1.02);
+    }
+
+    .checkout-btn i {
+      font-size: 0.9rem;
+    }
+
+    /* toast */
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: #0b1b33;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 40px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      opacity: 0;
+      transition: all 0.3s ease;
+      pointer-events: none;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+      z-index: 1000;
+      white-space: nowrap;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .toast i {
+      color: #f7b731;
+      margin-right: 8px;
+    }
+
+    /* responsive */
+    @media (max-width: 400px) {
+      .app-container {
+        padding: 1rem 0.8rem 1.5rem;
+      }
+      .cat-icon {
+        width: 44px;
+        height: 44px;
+        font-size: 1.3rem;
+      }
+      .timer {
+        font-size: 1.3rem;
+        padding: 6px 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <!-- header -->
+    <div class="header">
+      <div class="logo-area">
+        <div class="logo-icon"><i class="fas fa-bolt"></i></div>
+        <div class="logo-text">Build<span>Fast</span></div>
+      </div>
+      <div class="delivery-badge">
+        <i class="fas fa-clock"></i> 30 min
+      </div>
+    </div>
+
+    <!-- address -->
+    <div class="address-bar">
+      <div class="address-left">
+        <i class="fas fa-map-pin"></i>
+        <span>Sector 62, Noida</span>
+      </div>
+      <button class="change-btn" id="changeAddressBtn">Change</button>
+    </div>
+
+    <!-- promise / timer -->
+    <div class="promise-card">
+      <div class="promise-left">
+        <h3>⚡ Delivery in 30 minutes</h3>
+        <p><i class="fas fa-check-circle" style="color:#7ef0a2;"></i> Electrical, Plumbing & Construction</p>
+      </div>
+      <div class="timer" id="timerDisplay">
+        <i class="fas fa-hourglass-half"></i> 29:59
+      </div>
+    </div>
+
+    <!-- categories -->
+    <div>
+      <div class="section-title">
+        <span>Categories</span>
+        <a href="#" id="viewAllCat">View all</a>
+      </div>
+      <div class="categories">
+        <div class="cat-item active" data-category="electrical" id="catElectrical">
+          <div class="cat-icon"><i class="fas fa-bolt"></i></div>
+          <div class="cat-name">Electrical</div>
+          <div class="cat-sub">wires, switches</div>
+        </div>
+        <div class="cat-item" data-category="plumbing" id="catPlumbing">
+          <div class="cat-icon"><i class="fas fa-wrench"></i></div>
+          <div class="cat-name">Plumbing</div>
+          <div class="cat-sub">pipes, fittings</div>
+        </div>
+        <div class="cat-item" data-category="construction" id="catConstruction">
+          <div class="cat-icon"><i class="fas fa-hard-hat"></i></div>
+          <div class="cat-name">Construction</div>
+          <div class="cat-sub">cement, tools</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- products -->
+    <div>
+      <div class="products-header section-title">
+        <span id="categoryTitle">Electrical essentials</span>
+        <a href="#" id="seeAllProducts">See all</a>
+      </div>
+      <div class="product-grid" id="productGrid">
+        <!-- dynamic products injected via JS -->
+      </div>
+    </div>
+
+    <!-- cart summary -->
+    <div class="cart-bar" id="cartBar">
+      <div class="cart-info">
+        <div class="cart-icon">
+          <i class="fas fa-shopping-cart"></i>
+          <span class="cart-count" id="cartCount">0</span>
+        </div>
+        <div class="cart-total" id="cartTotal">₹0 <span>incl. taxes</span></div>
+      </div>
+      <button class="checkout-btn" id="checkoutBtn">
+        Checkout <i class="fas fa-arrow-right"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- toast notification -->
+  <div class="toast" id="toast"><i class="fas fa-check-circle"></i> <span id="toastMsg">Item added</span></div>
+
+  <script>
+    (function() {
+      // ---------- DATA ----------
+      const products = {
+        electrical: [
+          { id: 'e1', name: 'Copper Wire 1.5mm', price: 289, unit: '90m', icon: 'fa-plug', rating: 4.7 },
+          { id: 'e2', name: 'Modular Switch 6A', price: 99, unit: '1 pc', icon: 'fa-toggle-on', rating: 4.8 },
+          { id: 'e3', name: 'LED Bulb 9W', price: 149, unit: '1 pc', icon: 'fa-lightbulb', rating: 4.9 },
+          { id: 'e4', name: 'MCB 32A', price: 499, unit: '1 pc', icon: 'fa-shield-alt', rating: 4.6 },
+          { id: 'e5', name: 'PVC conduit 20mm', price: 189, unit: '3m', icon: 'fa-circle-notch', rating: 4.5 }
+        ],
+        plumbing: [
+          { id: 'p1', name: 'CPVC Pipe 1/2"', price: 249, unit: '1 m', icon: 'fa-water', rating: 4.7 },
+          { id: 'p2', name: 'Brass Faucet', price: 899, unit: '1 pc', icon: 'fa-faucet', rating: 4.9 },
+          { id: 'p3', name: 'PVC Elbow 90°', price: 79, unit: '1 pc', icon: 'fa-cog', rating: 4.5 },
+          { id: 'p4', name: 'Teflon Tape', price: 39, unit: '1 roll', icon: 'fa-tape', rating: 4.8 },
+          { id: 'p5', name: 'Angle Valve', price: 649, unit: '1 pc', icon: 'fa-valve', rating: 4.6 }
+        ],
+        construction: [
+          { id: 'c1', name: 'OPC Cement 50kg', price: 399, unit: '1 bag', icon: 'fa-cube', rating: 4.8 },
+          { id: 'c2', name: 'Wall Putty 20kg', price: 850, unit: '1 bag', icon: 'fa-fill-drip', rating: 4.7 },
+          { id: 'c3', name: 'TMT Steel Bar 12mm', price: 1249, unit: '1 rod', icon: 'fa-bars', rating: 4.9 },
+          { id: 'c4', name: 'Red Bricks', price: 18, unit: '1 pc', icon: 'fa-th', rating: 4.5 },
+          { id: 'c5', name: 'River Sand 50kg', price: 220, unit: '1 bag', icon: 'fa-mountain', rating: 4.6 }
+        ]
+      };
+
+      // ---------- STATE ----------
+      let activeCategory = 'electrical';
+      let cart = []; // array of { id, name, price, qty, icon, unit }
+      let timerInterval;
+      let secondsLeft = 1799; // 29:59
+
+      // ---------- DOM refs ----------
+      const productGrid = document.getElementById('productGrid');
+      const categoryTitle = document.getElementById('categoryTitle');
+      const catElectrical = document.getElementById('catElectrical');
+      const catPlumbing = document.getElementById('catPlumbing');
+      const catConstruction = document.getElementById('catConstruction');
+      const cartCount = document.getElementById('cartCount');
+      const cartTotal = document.getElementById('cartTotal');
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toastMsg');
+      const timerDisplay = document.getElementById('timerDisplay');
+
+      // ---------- Helper functions ----------
+      function showToast(message) {
+        toastMsg.textContent = message;
+        toast.classList.add('show');
+        clearTimeout(window.toastTimeout);
+        window.toastTimeout = setTimeout(() => {
+          toast.classList.remove('show');
+        }, 2000);
+      }
+
+      // format timer
+      function updateTimerDisplay() {
+        const mins = Math.floor(secondsLeft / 60);
+        const secs = secondsLeft % 60;
+        timerDisplay.innerHTML = `<i class="fas fa-hourglass-half"></i> ${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+      }
+
+      // countdown timer simulation
+      function startTimer() {
+        if (timerInterval) clearInterval(timerInterval);
+        timerInterval = setInterval(() => {
+          if (secondsLeft > 0) {
+            secondsLeft--;
+            updateTimerDisplay();
+          } else {
+            // reset to 30 min for demo (infinite loop)
+            secondsLeft = 1799;
+            updateTimerDisplay();
+          }
+        }, 1000);
+      }
+
+      // update cart UI
+      function updateCartUI() {
+        const totalItems = cart.reduce((acc, item) => acc + item.qty, 0);
+        const totalPrice = cart.reduce((acc, item) => acc + (item.price * item.qty), 0);
+        cartCount.textContent = totalItems;
+        cartTotal.innerHTML = `₹${totalPrice} <span>incl. taxes</span>`;
+        if (totalItems === 0) {
+          // subtle style
+        }
+      }
+
+      // add to cart handler (with product data)
+      function addToCart(product) {
+        const existing = cart.find(item => item.id === product.id);
+        if (existing) {
+          existing.qty += 1;
+          showToast(`➕ ${product.name} (${existing.qty})`);
+        } else {
+          cart.push({
+            id: product.id,
+            name: product.name,
+            price: product.price,
+            icon: product.icon,
+            unit: product.unit,
+            qty: 1
+          });
+          showToast(`✅ ${product.name} added`);
+        }
+        updateCartUI();
+      }
+
+      // render product list based on active category
+      function renderProducts() {
+        const items = products[activeCategory] || [];
+        let html = '';
+        items.forEach(prod => {
+          // check if already in cart to show quantity? not mandatory but nice
+          const cartItem = cart.find(c => c.id === prod.id);
+          const qtyInCart = cartItem ? cartItem.qty : 0;
+          html += `
+            <div class="product-card" data-id="${prod.id}">
+              <div class="product-img"><i class="fas ${prod.icon}"></i></div>
+              <div class="product-info">
+                <div class="product-name">${prod.name}</div>
+                <div class="product-meta">
+                  <span><i class="fas fa-star"></i> ${prod.rating}</span>
+                  <span>• ${prod.unit}</span>
+                  ${qtyInCart ? `<span style="color:#1e3c72; font-weight:600;">• ${qtyInCart} in cart</span>` : ''}
+                </div>
+                <div class="product-price">₹${prod.price}</div>
+              </div>
+              <button class="add-btn" data-id="${prod.id}" data-category="${activeCategory}">
+                <i class="fas fa-plus"></i>
+              </button>
+            </div>
+          `;
+        });
+        productGrid.innerHTML = html;
+
+        // attach event listeners to add buttons
+        document.querySelectorAll('.add-btn').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const id = btn.dataset.id;
+            const category = btn.dataset.category;
+            const product = products[category].find(p => p.id === id);
+            if (product) {
+              addToCart(product);
+              renderProducts(); // refresh to show cart qty in meta
+            }
+          });
+        });
+
+        // update category title
+        const titles = {
+          electrical: 'Electrical essentials',
+          plumbing: 'Plumbing supplies',
+          construction: 'Construction materials'
+        };
+        categoryTitle.textContent = titles[activeCategory] || 'Products';
+      }
+
+      // switch category
+      function setActiveCategory(category) {
+        activeCategory = category;
+        // update active UI
+        [catElectrical, catPlumbing, catConstruction].forEach(el => el.classList.remove('active'));
+        if (category === 'electrical') catElectrical.classList.add('active');
+        if (category === 'plumbing') catPlumbing.classList.add('active');
+        if (category === 'construction') catConstruction.classList.add('active');
+        renderProducts();
+      }
+
+      // ---------- EVENT LISTENERS ----------
+      catElectrical.addEventListener('click', () => setActiveCategory('electrical'));
+      catPlumbing.addEventListener('click', () => setActiveCategory('plumbing'));
+      catConstruction.addEventListener('click', () => setActiveCategory('construction'));
+
+      // change address (demo)
+      document.getElementById('changeAddressBtn').addEventListener('click', () => {
+        showToast('📍 Address changed (demo)');
+      });
+
+      // view all categories / see all products (demo)
+      document.getElementById('viewAllCat').addEventListener('click', (e) => {
+        e.preventDefault();
+        showToast('📂 All categories (demo)');
+      });
+      document.getElementById('seeAllProducts').addEventListener('click', (e) => {
+        e.preventDefault();
+        showToast('🔍 Full catalog (demo)');
+      });
+
+      // checkout
+      document.getElementById('checkoutBtn').addEventListener('click', () => {
+        if (cart.length === 0) {
+          showToast('🛒 Your cart is empty');
+          return;
+        }
+        const totalItems = cart.reduce((acc, i) => acc + i.qty, 0);
+        const totalPrice = cart.reduce((acc, i) => acc + i.price * i.qty, 0);
+        showToast(`🚚 Order placed: ${totalItems} items, ₹${totalPrice}. Delivery in 30 min!`);
+        // reset cart
+        cart = [];
+        updateCartUI();
+        renderProducts(); // clear cart quantities from product cards
+      });
+
+      // also make cart bar clickable? we keep checkout only.
+      // Optional: click on cart bar (not button) shows toast
+      document.getElementById('cartBar').addEventListener('click', (e) => {
+        if (e.target.closest('.checkout-btn')) return; // ignore button
+        if (cart.length === 0) showToast('🛒 Cart is empty');
+        else {
+          const items = cart.reduce((acc, i) => acc + i.qty, 0);
+          showToast(`🛒 ${items} items in cart`);
+        }
+      });
+
+      // ---------- INIT ----------
+      function init() {
+        renderProducts();
+        updateCartUI();
+        startTimer();
+        updateTimerDisplay();
+        // set active category default electrical
+        setActiveCategory('electrical');
+        // set initial timer display
+        secondsLeft = 1799;
+        updateTimerDisplay();
+      }
+
+      init();
+
+      // reset timer when page unload (optional)
+      window.addEventListener('beforeunload', () => {
+        if (timerInterval) clearInterval(timerInterval);
+      });
+
+    })();
+  </script>
+</body>
+</html>
